@@ -7,6 +7,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+        contents: write
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -33,8 +35,8 @@ jobs:
 
       - name: Commit and Push
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add *.m3u
           if git diff --cached --quiet; then
             echo "No changes"
@@ -43,3 +45,5 @@ jobs:
             git pull --rebase origin main
             git push origin main
           fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
